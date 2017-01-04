@@ -1,4 +1,7 @@
 # sails-hook-webpack2
+
+[![NPM version][npm-image]][npm-url]
+
 Webpack 2.x asset pipeline hook for Sails.js
 
 ## 1. Install
@@ -133,3 +136,6 @@ MIT
 Based on [sails-hook-webpack](https://www.npmjs.com/package/sails-hook-webpack).
 
 <img src='http://i.imgur.com/NsAdNdJ.png'>
+
+[npm-image]: https://img.shields.io/npm/v/sails-hook-webpack.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/sails-hook-webpack
