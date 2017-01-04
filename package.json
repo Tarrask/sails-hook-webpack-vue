@@ -1,0 +1,33 @@
+{
+  "name": "sails-hook-webpack2",
+  "version": "1.0.0",
+  "description": "Webpack 2.x asset pipeline hook for Sails.js",
+  "keywords": [
+    "sails",
+    "webpack"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewebsimple/sails-hook-webpack2.git"
+  },
+  "author": {
+    "name": "Pascal Martineau",
+    "email": "pascal@lewebsimple.ca"
+  },
+  "dependencies": {
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^2.2.0-rc.0",
+    "webpack-hot-middleware": "^2.15.0",
+    "webpack-merge": "^2.0.0"
+  },
+  "sails": {
+    "isHook": true,
+    "hookName": "webpack"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lewebsimple/sails-hook-webpack2/issues"
+  },
+  "homepage": "https://github.com/lewebsimple/sails-hook-webpack2#readme"
+}
