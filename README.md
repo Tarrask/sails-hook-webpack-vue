@@ -4,7 +4,7 @@ Webpack 2.x asset pipeline hook for Sails.js
 ## 1. Install
 ```sh
 npm install sails-hook-webpack2 --save
-``
+```
 
 ## 2. Configure
 
