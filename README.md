@@ -129,4 +129,7 @@ MIT
 ## Maintained By
 - [Pascal Martineau](https://github.com/lewebsimple)
 
+## Credits
+Based on [sails-hook-webpack](https://www.npmjs.com/package/sails-hook-webpack).
+
 <img src='http://i.imgur.com/NsAdNdJ.png'>
