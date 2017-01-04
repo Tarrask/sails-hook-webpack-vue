@@ -42,11 +42,22 @@ module.exports = function (sails) {
     }
   };
 
-  // Configure webpack
+  // Webpack configuration
   var config = hookOptions.config;
   if (hookOptions[process.env.NODE_ENV] && hookOptions[process.env.NODE_ENV].config) {
     config = merge(config, hookOptions[process.env.NODE_ENV].config);
   }
+  config = merge(config, {
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+          'HOST': JSON.stringify(sails.getHost() || 'localhost'),
+          'PORT': JSON.stringify(sails.config.port || 1137)
+        }
+      })
+    ]
+  });
 
   // Create webpack compiler
   hook.compiler = webpack(config, (err, stats) => {
@@ -71,6 +82,7 @@ module.exports = function (sails) {
       port: 3000
     };
     Object.assign(serverConfig, hookOptions.development.server || {});
+
     // Listen on specified port
     hook.server = new WebpackDevServer(hook.compiler, serverConfig);
     hook.server.listen(serverConfig.port);
