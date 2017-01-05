@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-webpack2",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Webpack 2.x asset pipeline hook for Sails.js",
   "keywords": [
     "sails",
