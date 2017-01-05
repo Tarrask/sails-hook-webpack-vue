@@ -53,7 +53,7 @@ module.exports = function (sails) {
         'process.env': {
           'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
           'HOST': JSON.stringify(sails.getHost() || 'localhost'),
-          'PORT': JSON.stringify(sails.config.port || 1137)
+          'PORT': JSON.stringify(sails.config.port || 1337)
         }
       })
     ]
