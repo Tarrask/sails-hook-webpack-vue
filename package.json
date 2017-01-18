@@ -16,10 +16,10 @@
     "email": "pascal@lewebsimple.ca"
   },
   "dependencies": {
-    "webpack": "^2.2.0-rc.3",
-    "webpack-dev-server": "^2.2.0-rc.0",
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^2.2.0",
     "webpack-hot-middleware": "^2.15.0",
-    "webpack-merge": "^2.0.0"
+    "webpack-merge": "^2.4.0"
   },
   "sails": {
     "isHook": true,
