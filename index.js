@@ -78,7 +78,7 @@ module.exports = function (sails) {
     }
     else {
       sails.log.info('sails-hook-webpack2: Watching for changes...');
-      hook.compiler.watch(hookOptions.watch, hook.afterBuild.bind(hook));
+      hook.compiler.watch(sails.config.webpack.watch, hook.afterBuild.bind(hook));
     }
   });
 
