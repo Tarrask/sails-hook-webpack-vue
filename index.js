@@ -22,13 +22,17 @@ module.exports = function (sails) {
       }
       sails.emit('hook:sails-hook-webpack2:after-build', stats);
       // Display information, errors and warnings
-      stats = stats.toJSON();
-      sails.log.info('sails-hook-webpack2: Build complete.');
-      if (stats.warnings.length > 0) {
-        sails.log.warn('sails-hook-webpack2: Build warnings:\n', stats.warnings);
+      if (stats.compilation.warnings && stats.compilation.warnings.length > 0) {
+        stats.compilation.warnings.forEach(warning => sails.log.warn('sails-hook-webpack2:', warning.message));
       }
-      if (stats.errors.length > 0) {
-        sails.log.error('sails-hook-webpack2: Build errors:\n', stats.errors);
+      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
+        stats.compilation.errors.forEach(error => sails.log.error('sails-hook-webpack2:', error.message));
+      }
+      sails.log.info('sails-hook-webpack2: Build complete ' + 
+        (stats.compilation.errors ? 'with errors' : 
+        (stats.compilation.warnings ? 'with warnings' : '')) + 
+        ': hash: ' + stats.hash + 
+        ' Time: ' + (stats.endTime - stats.startTime) + 'ms');
       }
     }
   };
