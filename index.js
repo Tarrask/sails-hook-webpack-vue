@@ -28,12 +28,7 @@ module.exports = function (sails) {
       if (stats.compilation.errors && stats.compilation.errors.length > 0) {
         stats.compilation.errors.forEach(error => sails.log.error('sails-hook-webpack2:', error.message));
       }
-      sails.log.info('sails-hook-webpack2: Build complete ' + 
-        (stats.compilation.errors ? 'with errors' : 
-        (stats.compilation.warnings ? 'with warnings' : '')) + 
-        ': hash: ' + stats.hash + 
-        ' Time: ' + (stats.endTime - stats.startTime) + 'ms');
-      }
+      sails.log.info('sails-hook-webpack2: Build complete. Hash: ' + stats.hash + ', Time: ' + (stats.endTime - stats.startTime) + 'ms');
     }
   };
 
