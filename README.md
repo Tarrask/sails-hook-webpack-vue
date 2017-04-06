@@ -37,7 +37,7 @@ Configure [webpack options](https://webpack.js.org/configuration/) for your proj
      entry: './src/main.js',
      output: {
        path: path.resolve(__dirname, '../.tmp/public'),
-       filename: '/js/bundle.js',
+       filename: 'js/bundle.js',
        publicPath: '/'
      }
    }
