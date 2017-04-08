@@ -82,8 +82,6 @@ module.exports = function (sails) {
         
       // Registrating dev and hot Middleware for development
       if (environment === 'development') {
-        options.entry.unshift("webpack-hot-middleware/client");
-    
         // disabling logging, we already handle logging in compiler afterBuild callback
         let config = {
           hot: merge({
