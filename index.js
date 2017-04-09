@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 
+const historyFallback = require('connect-history-api-fallback');
 const webpackDev = require('webpack-dev-middleware');
 const webpackHot = require('webpack-hot-middleware');
 
@@ -93,12 +94,13 @@ module.exports = function (sails) {
           }, sails.config.webpack.devMiddleware)
         };
     
+        sails.config.http.middleware.historyFallback = historyFallback();
         sails.config.http.middleware.webpackHot = webpackHot(hook.compiler, config.hot);
         sails.config.http.middleware.webpackDev = webpackDev(hook.compiler, config.dev);
         
-        
         sails.config.http.middleware.order.unshift('webpackDev');
         sails.config.http.middleware.order.unshift('webpackHot');
+        sails.config.http.middleware.order.unshift('historyFallback');
         
         sails.log.info('sails-hook-webpack2: webpack-[hot|dev]-middleware configured successfully.');
       } 
