@@ -20,14 +20,20 @@ module.exports = function (sails) {
       sails.emit('hook:sails-hook-webpack2:after-build', stats);
       // Display information, errors and warnings
       if (stats.compilation.warnings && stats.compilation.warnings.length > 0) {
-        stats.compilation.warnings.forEach(warning => sails.log.warn('sails-hook-webpack2: in', warning.origin ? warning.origin.resource : 'unknown', '\n', warning.message));
+        stats.compilation.warnings.forEach(
+          warning => sails.log.warn('sails-hook-webpack2: in', warning.origin ?
+            warning.origin.resource :
+            'unknown', '\n', warning.message));
       }
       if (stats.compilation.errors && stats.compilation.errors.length > 0) {
-        stats.compilation.errors.forEach(error => sails.log.error('sails-hook-webpack2: in', error.origin.resource, '\n', error.message));
+        stats.compilation.errors.forEach(
+          error => sails.log.error('sails-hook-webpack2: in', error.origin ?
+            error.origin.resource :
+            'unknown', '\n', error.message));
       }
       sails.log.info('sails-hook-webpack2: Build complete. Hash: ' + stats.hash + ', Time: ' + (stats.endTime - stats.startTime) + 'ms');
     },
-    
+
     configure() {
       // Validate hook configuration
       if (!sails.config.webpack || !sails.config.webpack.options) {
@@ -35,7 +41,7 @@ module.exports = function (sails) {
         sails.log.warn('sails-hook-webpack2: Please configure your config/webpack.js file.');
         return {};
       }
-      
+
       const environment = process.env.NODE_ENV || 'development';
       const host = sails.getHost() || 'localhost';
       const port = sails.config.port || 1337;
@@ -65,6 +71,7 @@ module.exports = function (sails) {
       });
 
       // Create webpack compiler
+      sails.log('sails-hook-webpack2: starting webpack ...');
       hook.compiler = webpack(options, (err, stats) => {
         if (err) {
           sails.log.error('sails-hook-webpack2: Configuration error:\n', err);
@@ -80,7 +87,7 @@ module.exports = function (sails) {
           hook.compiler.watch(sails.config.webpack.watch, hook.afterBuild.bind(hook));
         }
       });
-        
+
       // Registrating dev and hot Middleware for development
       if (environment === 'development') {
         // disabling logging, we already handle logging in compiler afterBuild callback
@@ -93,17 +100,17 @@ module.exports = function (sails) {
             quiet: true
           }, sails.config.webpack.devMiddleware)
         };
-    
+
         sails.config.http.middleware.historyFallback = historyFallback();
         sails.config.http.middleware.webpackHot = webpackHot(hook.compiler, config.hot);
         sails.config.http.middleware.webpackDev = webpackDev(hook.compiler, config.dev);
-        
+
         sails.config.http.middleware.order.unshift('webpackDev');
         sails.config.http.middleware.order.unshift('webpackHot');
         sails.config.http.middleware.order.unshift('historyFallback');
-        
+
         sails.log.info('sails-hook-webpack2: webpack-[hot|dev]-middleware configured successfully.');
-      } 
+      }
     }
   };
 
