@@ -10,7 +10,7 @@ Todo:
  - maybe delete the "// Merge default options" line 74 and following, options are correct in
    the webpack template.
  - use spinner like webpack template when compiling :) / optionnal
- - use defaults and configKey (logPrefix, timeout, watching, ...)
+ - use defaults and configKey (this.logPrefix, timeout, watching, ...)
  - move this todo elsewhere
  - 
  */
@@ -41,7 +41,7 @@ module.exports = function (sails) {
     logPrefix: 'sails-hook-webpack2:',
 
   /**  afterBuild(err, stats) {
-      if (err) return sails.log.error(logPrefix, 'Build error:\n', err);
+      if (err) return sails.log.error(this.logPrefix, 'Build error:\n', err);
       // Emit events
       if (!this.emitReady) {
         sails.emit('hook:sails-hook-webpack2:compiler-ready', {});
@@ -51,24 +51,24 @@ module.exports = function (sails) {
       // Display information, errors and warnings
       if (stats.compilation.warnings && stats.compilation.warnings.length > 0) {
         stats.compilation.warnings.forEach(
-          warning => sails.log.warn(logPrefix, 'in', warning.origin ?
+          warning => sails.log.warn(this.logPrefix, 'in', warning.origin ?
             warning.origin.resource :
             'unknown', '\n', warning.message));
       }
       if (stats.compilation.errors && stats.compilation.errors.length > 0) {
         stats.compilation.errors.forEach(
-          error => sails.log.error(logPrefix, 'in', error.origin ?
+          error => sails.log.error(this.logPrefix, 'in', error.origin ?
             error.origin.resource :
             'unknown', '\n', error.message));
       }
-      sails.log.info(logPrefix, 'Build complete. Hash: ' + stats.hash + ', Time: ' + (stats.endTime - stats.startTime) + 'ms');
+      sails.log.info(this.logPrefix, 'Build complete. Hash: ' + stats.hash + ', Time: ' + (stats.endTime - stats.startTime) + 'ms');
     }, */
 
     configure() {
       // Validate hook configuration
       if (!sails.config.webpack || !sails.config.webpack.options) {
-        sails.log.warn(logPrefix, 'No webpack options have been defined.');
-        sails.log.warn(logPrefix, 'Please configure your config/webpack.js file.');
+        sails.log.warn(this.logPrefix, 'No webpack options have been defined.');
+        sails.log.warn(this.logPrefix, 'Please configure your config/webpack.js file.');
         return {};
       }
 
@@ -101,20 +101,20 @@ module.exports = function (sails) {
       });
 
       // Create webpack compiler
-      sails.log.debug(logPrefix, 'Creating webpack compiler ...');
+      sails.log.debug(this.logPrefix, 'Creating webpack compiler ...');
       hook.compiler = webpack(options);
       /* , (err, stats) => {
         if (err) {
-          sails.log.error(logPrefix, 'Configuration error:\n', err);
+          sails.log.error(this.logPrefix, 'Configuration error:\n', err);
           return {};
         }
-        sails.log.info(logPrefix, 'Webpack configured successfully.');
+        sails.log.info(this.logPrefix, 'Webpack configured successfully.');
         if (environment === 'production') {
-          sails.log.info(logPrefix, 'Building for production...');
+          sails.log.info(this.logPrefix, 'Building for production...');
           hook.compiler.run(hook.afterBuild.bind(hook));
         }
         else {
-          sails.log.info(logPrefix, 'Watching for changes...');
+          sails.log.info(this.logPrefix, 'Watching for changes...');
           hook.compiler.watch(sails.config.webpack.watch, hook.afterBuild.bind(hook));
         }
       }); */
@@ -132,7 +132,7 @@ module.exports = function (sails) {
           }, sails.config.webpack.devMiddleware)
         };
 
-        sails.log.debug(logPrefix, 'Configuring devloppment middlewares ...');
+        sails.log.debug(this.logPrefix, 'Configuring devloppment middlewares ...');
         sails.config.http.middleware.historyFallback = historyFallback();
         sails.config.http.middleware.webpackHot = webpackHot(hook.compiler, config.hot);
         sails.config.http.middleware.webpackDev = webpackDev(hook.compiler, config.dev);
@@ -146,14 +146,14 @@ module.exports = function (sails) {
       sails.log.warn("sails hook initializing, please wait ...");
 
       if (process.env.NODE_ENV === 'production') {
-        sails.log.info(logPrefix, 'Building for production...');
+        sails.log.info(this.logPrefix, 'Building for production...');
         hook.compiler.run((err, stats) => {
           if(!hook.cbCalled) { hook.cbCalled = true; cb(); }
           hook.displayStats(err, stats);
         });
       }
       else {
-        sails.log.info(logPrefix, 'Watching for changes...');
+        sails.log.info(this.logPrefix, 'Watching for changes...');
         hook.compiler.watch(sails.config.webpack.watch, (err, stats) => {
           if(!hook.cbCalled) { hook.cbCalled = true; cb(); }
           hook.displayStats(err, stats);
