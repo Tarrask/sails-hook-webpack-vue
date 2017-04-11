@@ -19,7 +19,8 @@
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0",
     "webpack-hot-middleware": "^2.15.0",
-    "webpack-merge": "^2.4.0"
+    "webpack-merge": "^2.4.0",
+    "ora": "^1.1.0"
   },
   "sails": {
     "isHook": true,
