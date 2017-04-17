@@ -29,7 +29,8 @@ module.exports = function (sails) {
   const hook = {
     defaults: {
        __configKey__: {
-          _hookTimeout: 40000 // wait 40 seconds before timing out
+          _hookTimeout: 40000, // wait 40 seconds before timing out
+          logPrefix: 'sails-hook-webpack2:',
        }
     },
 
@@ -37,11 +38,12 @@ module.exports = function (sails) {
     cbCalled: false,
 
     // to uniformize the logging emit by this hook
-    logPrefix: 'sails-hook-webpack2:',
+    logPrefix: '',
 
 
     configure() {
       let webpackConfig = sails.config[this.configKey];
+      this.logPrefix = webpackConfig.logPrefix;
 
       // Validate hook configuration
       if (!webpackConfig || !webpackConfig.options) {
@@ -91,7 +93,20 @@ module.exports = function (sails) {
             log: (message) => { config.hot.quiet || sails.log(message) }
           }, webpackConfig.middlewares ? webpackConfig.middlewares.hot : {}),
           dev: merge({
-            quiet: true
+            quiet: false,
+            stats: {
+              colors: true,
+              children: false,
+              cachedAssets: false,
+              chunks: true,
+              chunkModules: false,
+              errorDetails: false,
+              assets: false,
+              version: false
+            },
+            log: text => { text.split('\n').forEach(line => sails.log.info(line)) },
+            warn: text => { text.split('\n').forEach(line => sails.log.warn(line)) },
+            error: text => { text.split('\n').forEach(line => sails.log.error(line)) }
           }, webpackConfig.middlewares ? webpackConfig.middlewares.dev : {})
         };
 
@@ -119,16 +134,13 @@ module.exports = function (sails) {
       }
       else {
         const spinner = ora('Building for development...').start();
-      //  hook.compiler.watch(sails.config[this.configKey].watch, (err, stats) => {
         process.nextTick(() => {
           if(!hook.cbCalled) { 
             spinner.succeed('Compilation done, watching for change...');
             hook.cbCalled = true;
             cb();
           }
-         // hook.displayStats(err, stats);
         });
-       // });
       }
     },
     displayStats(err, stats) {
@@ -139,10 +151,14 @@ module.exports = function (sails) {
 
       stats.toString({
         colors: true,
-        modules: false,
         children: false,
-        chunks: false,
-        chunkModules: false
+        cachedAssets: false,
+        chunks: true,
+        chunkModules: false,
+        errorDetails: false,
+        assets: false,
+        version: true
+      //  chunkModules: true
       }).split('\n').forEach(line => sails.log.info(line));
     }
   };
