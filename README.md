@@ -2,129 +2,34 @@
 
 [![NPM version][npm-image]][npm-url]
 
-Webpack 2.x asset pipeline hook for Sails.js
+Webpack 2.x asset pipeline hook for Sails.js specially tailored for the [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack)
 
 ## Getting started
 
-Install this package via npm:
+This package is best used with the [sails-generate-new-webpack-vue](https://www.npmjs.com/package/sails-generate-new-webpack-vue) which will generate a new sails project using webpack2 instead of grunt and vue.js as a front-end framework and will install this package as a dependency.
 
-```sh
-npm install --save sails-hook-webpack2
-```
+For usage or more informations, please read the [sails-generate-new-webpack-vue readme](https://www.npmjs.com/package/sails-generate-new-webpack-vue).
 
-Disable the Sails grunt hook (you can also create your Sails project using the [--no-frontend](http://sailsjs.com/documentation/reference/command-line-interface/sails-new) flag):
 
-```js
-// .sailsrc
-{
-  "hooks": {
-    "grunt": false
-  }
-}
-```
+## Usage
 
-Configure [webpack options](https://webpack.js.org/configuration/) for your project:
+This package is a sails.js hook that will be triggered when sails.js lifts. It use the build config located in ./webpack/build and ./webpack/config. Please see the vuejs-templates/webpack [documentation](http://vuejs-templates.github.io/webpack/) for more informations.
 
- ```js
- // config/webpack.js
+In a development environment, it will inject the webpack-dev-middleware, the webpack-hot-middleware and the connect-history-api-fallback middlewares.
 
- const path = require('path');
+In a production envrionment, it will compile the webpack project before the server get lifted.
 
- module.exports.webpack = {
-
-   // webpack options, see https://webpack.js.org/configuration/
-   options: {
-     entry: './src/main.js',
-     output: {
-       path: path.resolve(__dirname, '../.tmp/public'),
-       filename: 'js/bundle.js',
-       publicPath: '/'
-     }
-   }
-
- };
- ```
-
-Don't forget to include `/js/bundle.js` near the bottom of your views layout:
-
-```
-// views/layout.ejs
-// ...
-    <script src="/js/bundle.js"></script>
-  </body>
-</html>
-```
-
-Lift your application!
-
-```sh
-sails lift
-```
-
-### Environment-specific options
-
-Additional options can be configured for specific environments (i.e. `development` or `production`). When initializing webpack, this hook will combine the appropriate options for your particular configuration using [webpack-merge](https://www.npmjs.com/package/webpack-merge).
-
-```js
-// config/webpack.js
-
-const webpack = require('webpack');
-
-module.exports.webpack = {
-
-  // Common options
-  options: {},
-
-  // Production-specific options
-  production: {
-    plugins: [
-      // Minimize CSS
-      new webpack.LoaderOptionsPlugin({
-        minimize: true
-      }),
-    ]
-  }
-
-};
-```
-
-### Live reloading / HMR
-
-In non-production environments only, [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) can be configured to serve your application and update the browser on file changes.
-This requires using a different port than your Sails application and setting up the built-in [proxy](https://webpack.js.org/configuration/dev-server/#devserver-proxy) or configuring a middleware like [connect-history-api-fallback](https://www.npmjs.com/package/connect-history-api-fallback).
-
-```js
-// config/webpack.js
-
-module.exports.webpack = {
-
-  options: {},
-
-  // webpack-dev-server configuration, see https://webpack.js.org/configuration/dev-server/
-  server: {
-    port: 3000
-  }
-
-};
-```
-
-### Events
-
-This hook provides events that can be listened to by using [`sails.on()`](https://github.com/balderdashy/sails/blob/master/lib/EVENTS.md#usage)
-
-- **hook:sails-hook-webpack2:compiler-ready**  - emitted when the compiler is initialised and ready, usually after the first build event.
-- **hook:sails-hook-webpack2:after-build** - emitted after each webpack build, the event data includes the webpack build stats.
 
 ## License
 MIT
 
 ## Maintained By
-- [Pascal Martineau](https://github.com/lewebsimple)
+[Damien Plumettaz](https://github.com/tarrask)
 
 ## Credits
-Based on [sails-hook-webpack](https://www.npmjs.com/package/sails-hook-webpack).
+Based on [sails-hook-webpack2](https://github.com/lewebsimple/sails-hook-webpack2)
 
 <img src='http://i.imgur.com/NsAdNdJ.png'>
 
 [npm-image]: https://img.shields.io/npm/v/sails-hook-webpack2.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/sails-hook-webpack2
+[npm-url]: https://npmjs.org/package/sails-hook-webpack-vue
