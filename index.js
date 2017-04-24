@@ -1,18 +1,18 @@
 /*
 
-Done: 
+Done:
  - Reorder hook initialization process. Webpack is created in the configure() function
    but the compilation only occure in the initialize(cb) function, the cb() in the called
    when the first compilation is finished.
  - use spinner like webpack template when compiling :) / optionnal
  - better display of the compilation stats.
 
-Todo: 
+Todo:
  - maybe delete the "// Merge default options" line 74 and following, options are correct in
    the webpack template.
  - use defaults and configKey (this.logPrefix, timeout, watching, ...)
  - move this todo elsewhere
- - 
+ -
  */
 
 const webpack = require('webpack');
@@ -30,7 +30,7 @@ module.exports = function (sails) {
     defaults: {
        __configKey__: {
           _hookTimeout: 40000, // wait 40 seconds before timing out
-          logPrefix: 'sails-hook-webpack2:',
+          logPrefix: 'sails-hook-webpack-vue:',
        }
     },
 
@@ -72,7 +72,7 @@ module.exports = function (sails) {
               'SAILS_HOST': JSON.stringify(host),
               'SAILS_PORT': JSON.stringify(port)
             }
-          }) 
+          })
         ],
         performance: {
           hints: false
@@ -121,25 +121,34 @@ module.exports = function (sails) {
       }
     },
     initialize(cb) {
-      if (process.env.NODE_ENV === 'production') {
-        const spinner = ora('Building for production...').start();
-        hook.compiler.run((err, stats) => {
-          if(!hook.cbCalled) { 
-            spinner.succeed("Compilation done.");
-            hook.cbCalled = true; 
-            cb(); 
-          }
-          hook.displayStats(err, stats);
-        });
-      }
-      else {
+      if (process.env.NODE_ENV === 'development') {
         const spinner = ora('Building for development...').start();
         process.nextTick(() => {
-          if(!hook.cbCalled) { 
+          if(!hook.cbCalled) {
             spinner.succeed('Compilation done, watching for change...');
             hook.cbCalled = true;
             cb();
           }
+        });
+      }
+      else if(process.env.NODE_ENV === 'testing') {
+        sails.log.info(this.logPrefix, 'No need for webpack during server-side tests.');
+        process.nextTick(() => {
+          if(!hook.cbCalled) {
+            hook.cbCalled = true;
+            cb();
+          }
+        });
+      }
+      else {
+        const spinner = ora('Building for production...').start();
+        hook.compiler.run((err, stats) => {
+          if(!hook.cbCalled) {
+            spinner.succeed("Compilation done.");
+            hook.cbCalled = true;
+            cb();
+          }
+          hook.displayStats(err, stats);
         });
       }
     },
