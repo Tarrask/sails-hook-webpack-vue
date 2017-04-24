@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-webpack-vue",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Webpack 2.x and vue.js 2 asset pipeline hook for Sails.js",
   "keywords": [
     "sails",
