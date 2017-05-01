@@ -115,9 +115,9 @@ module.exports = function (sails) {
         sails.config.http.middleware.webpackHot = webpackHot(hook.compiler, config.hot);
         sails.config.http.middleware.webpackDev = webpackDev(hook.compiler, config.dev);
 
-        sails.config.http.middleware.order.unshift('webpackDev');
-        sails.config.http.middleware.order.unshift('webpackHot');
-        sails.config.http.middleware.order.unshift('historyFallback');
+        // insert middlewares after the sails.router middleware
+        let index = sails.config.http.middleware.order.findIndex(el => el === 'router' ? el : undefined);
+        sails.config.http.middleware.order.splice(index+1, 0, 'historyFallback', 'webpackHot', 'webpackDev');
       }
     },
     initialize(cb) {
