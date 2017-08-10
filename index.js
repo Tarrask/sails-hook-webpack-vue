@@ -111,13 +111,18 @@ module.exports = function (sails) {
         };
 
         sails.log.debug(this.logPrefix, 'Configuring development middlewares ...');
-        sails.config.http.middleware.historyFallback = historyFallback();
         sails.config.http.middleware.webpackHot = webpackHot(hook.compiler, config.hot);
         sails.config.http.middleware.webpackDev = webpackDev(hook.compiler, config.dev);
 
-        // insert middlewares after the sails.router middleware
-        let index = sails.config.http.middleware.order.findIndex(el => el === 'router' ? el : undefined);
-        sails.config.http.middleware.order.splice(index+1, 0, 'webpackHot', 'webpackDev', 'historyFallback');
+        // insert middlewares after the after middleware or sails.router by default
+        let afterMiddleware = webpackConfig.middlewares.after || 'router';
+        let index = sails.config.http.middleware.order.findIndex(el => el === afterMiddleware ? el : undefined);
+        sails.config.http.middleware.order.splice(index+1, 0, 'webpackHot', 'webpackDev');
+
+        if(webpackConfig.middlewares.history) {
+          sails.config.http.middleware.historyFallback = historyFallback();
+          sails.config.http.middleware.order.splice(index+1, 0, 'historyFallback');
+        }
       }
     },
     initialize(cb) {
