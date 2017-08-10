@@ -117,7 +117,7 @@ module.exports = function (sails) {
 
         // insert middlewares after the sails.router middleware
         let index = sails.config.http.middleware.order.findIndex(el => el === 'router' ? el : undefined);
-        sails.config.http.middleware.order.splice(index+1, 0, 'historyFallback', 'webpackHot', 'webpackDev');
+        sails.config.http.middleware.order.splice(index+1, 0, 'webpackHot', 'webpackDev', 'historyFallback');
       }
     },
     initialize(cb) {
