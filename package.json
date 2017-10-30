@@ -17,7 +17,7 @@
     "email": "damien.plumettaz@bluewin.ch"
   },
   "peerDependencies": {
-    "webpack": ">= 2.2 < 4",
+    "webpack": ">= 2.2 < 4"
   },
   "dependencies": {
     "webpack-merge": "^1.4.0"
