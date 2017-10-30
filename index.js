@@ -19,10 +19,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ora = require('ora');
 
-const historyFallback = require('connect-history-api-fallback');
-const webpackDev = require('webpack-dev-middleware');
-const webpackHot = require('webpack-hot-middleware');
-
 module.exports = function (sails) {
 
   // Sails hook specification
@@ -86,6 +82,10 @@ module.exports = function (sails) {
 
       // Registrating dev and hot Middleware for development
       if (environment === 'development') {
+		const historyFallback = require('connect-history-api-fallback');
+		const webpackDev = require('webpack-dev-middleware');
+		const webpackHot = require('webpack-hot-middleware');
+
         // disabling logging, we already handle logging in compiler callback and displayStats
         let config = {
           hot: merge({
