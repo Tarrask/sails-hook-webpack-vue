@@ -16,12 +16,13 @@
     "name": "Damien Plumettaz",
     "email": "damien.plumettaz@bluewin.ch"
   },
+  "peerDependencies": {
+    "webpack": ">= 2.2 < 4",
+    "webpack-dev-middleware": ">= 1.11 < 2",
+    "webpack-hot-middleware": "2.x",
+    "webpack-merge": "^2.4.0"
+  },
   "dependencies": {
-    "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0",
-    "webpack-dev-middleware": "^1.10.0",
-    "webpack-hot-middleware": "^2.15.0",
-    "webpack-merge": "^2.4.0",
     "connect-history-api-fallback": "^1.3.0",
     "ora": "^1.1.0"
   },
